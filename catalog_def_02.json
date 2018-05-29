@@ -1,0 +1,88 @@
+[
+  {
+    "family": "Data_Modeling__Supervised_Learning",
+    "name": "Decision_Tree_Fit_CV",
+    "label": "Decision Tree Fit with CV",
+    "description": "Builds the decision tree model with cross-validation fitting the provided learning data."
+  },
+  {
+    "name": "sklearn_decision_tree_fit_cv",
+    "label": "Decision Tree Fit with CV",
+    "description": "Builds the decision tree model with the best hyperparameters found through cross-validation fitting the provided learning data: fits a population, with the scikit-learn library",
+    "algorithm": "Decision_Tree_Fit_CV",
+    "entry_point": "ikats.algo.core.ml.supervised.sk_decision_tree_cv::fit",
+    "inputs": [
+      {
+        "name": "population",
+        "label": "Population",
+        "description": "The population is defined from an object with IKATS type table.",
+        "type": "table"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_column_name",
+        "label": "Target",
+        "description": "The name of the attribute providing the class label of the observed subject. Must match one of the available population attributes.",
+        "type": "text"
+      },
+      {
+        "name": "identifier_column_name",
+        "label": "ID",
+        "description": "The name of the attribute identifying each observed subject. Must match one of the available population attributes.",
+        "type": "text"
+      },
+      {
+        "name": "table_name",
+        "description": "Name of the table to create",
+        "type": "text",
+        "label": "Table name"
+      },
+      {
+        "name": "folds",
+        "label": "Number of folds",
+        "description": "Number of folds to be used by the cross-validation procedure",
+        "type": "number",
+        "default_value": 3
+      },
+      {
+        "name": "depth_parameters",
+        "label": "Depth Parameters",
+        "description": "List of values for the maximum depth parameter to search on for the DecisionTree algorithm",
+        "type": "text"
+      },
+      {
+        "name": "balanced_parameters",
+        "label": "Balanced Parameters",
+        "description": "List of values for the class balancing parameter to search on for the DecisionTree algorithm",
+        "type": "text"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "clf_model",
+        "label": "Model",
+        "description": "The computed decision tree model: fits the population. This binary content ought to be used by the back-end.",
+        "type": "sk_model"
+      },
+      {
+        "name": "clf_dot",
+        "label": "Dot",
+        "description": "The dot graph description, matching the computed decision tree model. The language dot describes trees in a plain text format. This description ought to be used by viewer.",
+        "type": "dot"
+      },
+      {
+        "name": "clf_best_params",
+        "label": "params",
+        "description": "The best parameters found by the cross validation method",
+        "type": "text"
+      },
+      {
+        "name": "clf_cv_results",
+        "label": "cv_results",
+        "description": "The complete results of the cross validation algorithm",
+        "type": "table"
+      }
+    ]
+  }
+]
