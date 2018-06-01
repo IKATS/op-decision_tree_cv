@@ -23,7 +23,7 @@ from unittest import TestCase
 import mock
 import numpy as np
 
-from ikats.algo.op-ml.supervised.sk_decision_tree_cv import fit
+from ikats.algo.ml.supervised.sk_decision_tree_cv import fit
 from ikats.core.library.exception import IkatsException, IkatsInputTypeError
 from ikats.core.resource.api import IkatsApi
 
