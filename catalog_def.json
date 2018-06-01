@@ -14,7 +14,7 @@
     "inputs": [
       {
         "name": "population",
-        "label": "Population",
+        "label": "Table",
         "description": "The population is defined from an object with IKATS type table.",
         "type": "table"
       }
