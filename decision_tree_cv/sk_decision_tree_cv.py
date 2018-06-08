@@ -24,7 +24,7 @@ import numpy as np
 from sklearn import tree
 from sklearn.model_selection import GridSearchCV
 
-from ikats.algo.ml.supervised.sk_decision_tree import split_population
+from ikats.algo.decision_tree.sk_decision_tree import split_population
 from ikats.core.library.exception import IkatsException, IkatsInputTypeError
 from ikats.core.resource.api import IkatsApi
 
