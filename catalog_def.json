@@ -10,11 +10,11 @@
     "label": "Decision Tree Fit with CV",
     "description": "Builds the decision tree model with the best hyperparameters found through cross-validation fitting the provided learning data: fits a population, with the scikit-learn library",
     "algorithm": "Decision_Tree_Fit_CV",
-    "entry_point": "ikats.algo.core.ml.supervised.sk_decision_tree_cv::fit",
+    "entry_point": "decision_tree_cv.sk_decision_tree_cv::fit",
     "inputs": [
       {
         "name": "population",
-        "label": "Population",
+        "label": "Table",
         "description": "The population is defined from an object with IKATS type table.",
         "type": "table"
       }
