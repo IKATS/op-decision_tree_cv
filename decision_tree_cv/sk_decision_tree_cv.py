@@ -239,6 +239,8 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
         tree.export_graphviz(gcv.best_estimator_, out_file=dot_io, feature_names=column_names,
                              class_names=class_names, filled=True, label='all')
         dot = dot_io.getvalue()
+        # Review#492 quel est l'interet de ce retour charriot ajouté sur une ligne né dépassant pas les 120 caractères ?
+        # je trouve que ca nuit à la lisibilité => revoir l'ensemble du nouveau formatage appliqué et éventuellement change tes réglages
         LOGGER.info(
             "  ... finished exporting the Decision Tree CV to dot format")
 

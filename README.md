@@ -20,9 +20,9 @@ The K-fold cross-validation works as follow:
 Once we have tested all the combination we wanted to, we can pick the one with the highest score and name it our
 best model. Because we have iterated over several tests sets, we should be safe from overfitting on the training set.
 
-![cv](https://static.oschina.net/uploads/img/201609/26155106_OfXx.png){: .center-image" width="600px" }
+![cv](https://static.oschina.net/uploads/img/201609/26155106_OfXx.png)
 
-Figure 1 Overview of the cross validation procedure
+Figure 1 : Overview of the cross validation procedure
 
 ### Input and parameters
 
@@ -46,7 +46,7 @@ The operator has 5 outputs :
 - **Model** : a binary dump of the best model found by the procedure, to be used by the Decision Tree Predict operator
 - **Dot** : the visualisation of the best found decision tree in the GraphViz format
 - **Params** : a JSON with the best combination of parameters found by the procedure
-- **Result** : a table summarising the cross validation procedure, with informations about every combination of parameters that were tested
+- **Result** : a **table** summarising the cross validation procedure, with informations about every combination of parameters that were tested
   - **rank** : the rank of the parameter combination according to the mean of the test accuracies of the K-fold
     cross-validation, the table is sorted according this column
   - **max_depth** & **balancing** : the values of the parameters tested on each run
