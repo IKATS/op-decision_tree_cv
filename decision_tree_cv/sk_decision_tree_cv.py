@@ -89,13 +89,11 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
 
     if type(target_column_name) is not str:
         msg = "target_column_name has unexpected type={}"
-        raise IkatsInputTypeError(msg.format(
-            type(target_column_name).__name__))
+        raise IkatsInputTypeError(msg.format(type(target_column_name).__name__))
 
     if type(identifier_column_name) is not str:
         msg = "identifier_column_name has unexpected type={}"
-        raise IkatsInputTypeError(msg.format(
-            type(identifier_column_name).__name__))
+        raise IkatsInputTypeError(msg.format(type(identifier_column_name).__name__))
 
     if (type(folds) is not int) and (folds is not None):
         msg = "depth_parameters has unexpected type={}"
@@ -114,8 +112,7 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
     else:
         if re.match(parsing_regexp, depth_parameters) is None:  # a list of values is given
             try:
-                depth_list = [int(val)
-                              for val in depth_parameters.split(sep=';')]
+                depth_list = [int(val) for val in depth_parameters.split(sep=';')]
             except ValueError:
                 msg = "depth_parameters must be integers"
                 raise IkatsException(msg)
@@ -158,8 +155,7 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
             raise IkatsException(
                 'Only two possible values for balance parameters')
         if all([v in ['True', 'False'] for v in vals_balance]):
-            parsed_balancing = ['balanced' if val ==
-                                              'True' else None for val in vals_balance]
+            parsed_balancing = ['balanced' if val == 'True' else None for val in vals_balance]
         else:
             raise IkatsException('Only two possible values are True and False')
 
@@ -224,8 +220,8 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
 
         # 1/ prepare the learning set
         #
-        feature_vectors, target, class_names, column_names = split_population(population, target_column_name,
-                                                                              identifier_column_name)
+        feature_vectors, target, class_names, column_names = split_population(
+            population, target_column_name, identifier_column_name)
 
         # 2/ prepare the DecisionTree and CrossValidation procedure
         #
@@ -239,10 +235,7 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
         tree.export_graphviz(gcv.best_estimator_, out_file=dot_io, feature_names=column_names,
                              class_names=class_names, filled=True, label='all')
         dot = dot_io.getvalue()
-        # Review#492 quel est l'interet de ce retour charriot ajouté sur une ligne né dépassant pas les 120 caractères ?
-        # je trouve que ca nuit à la lisibilité => revoir l'ensemble du nouveau formatage appliqué et éventuellement change tes réglages
-        LOGGER.info(
-            "  ... finished exporting the Decision Tree CV to dot format")
+        LOGGER.info("  ... finished exporting the Decision Tree CV to dot format")
 
         # Formatting the result dictionary to an IKATS table
         formatted_results = _fill_table_cv_results(gcv.cv_results_)
@@ -266,9 +259,7 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
         raise
     except Exception:
         msg = "Unexpected error: fit_population(..., {}, {}, {})"
-        raise IkatsException(msg.format(target_column_name,
-                                        identifier_column_name,
-                                        parameters))
+        raise IkatsException(msg.format(target_column_name, identifier_column_name, parameters))
 
 
 def _fill_table_cv_results(dic_result):
@@ -290,8 +281,7 @@ def _fill_table_cv_results(dic_result):
 
     # Preparing the cell content
     cell_content = [[i + 1 for i in range(len(dic_result['mean_fit_time']))],
-                    dic_result['rank_test_score'].tolist(), [val['max_depth']
-                                                             for val in dic_result['params']],
+                    dic_result['rank_test_score'].tolist(), [val['max_depth'] for val in dic_result['params']],
                     [val['class_weight'] is not None for val in dic_result['params']],
                     dic_result['mean_test_score'].tolist(), dic_result['std_test_score'].tolist()]
     # Turning into a numpy as array to perform transposition and sorting by rank
@@ -306,8 +296,7 @@ def _fill_table_cv_results(dic_result):
         cell[1] = 0 if cell[1] is None else cell[1]
     # Filling headers columns
     table['headers']['col'] = dict()
-    table['headers']['col']['data'] = ['Score', 'rank',
-                                       'max_depth', 'balancing', 'mean_score', 'std_score']
+    table['headers']['col']['data'] = ['Score', 'rank', 'max_depth', 'balancing', 'mean_score', 'std_score']
 
     # Filling rows header
     table['headers']['row'] = dict()
