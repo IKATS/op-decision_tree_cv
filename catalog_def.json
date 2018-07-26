@@ -51,7 +51,12 @@
       "type": "text"
     }
   ],
-  "outputs": [
+  "outputs": [{
+      "name": "tdt",
+      "label": "TDT",
+      "description": "The Decision Tree model JSON, TDT compatible",
+      "type": "tdt"
+    },
     {
       "name": "clf_model",
       "label": "Model",

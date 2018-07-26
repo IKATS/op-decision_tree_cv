@@ -103,9 +103,9 @@ class TestSkDecisionTreeCV(TestCase):
         Tests the nominal execution based upon mock data: IRIS data
         """
 
-        mdl, dot, best_params, table_name = fit(population=get_table(), target_column_name='"Species"',
-                                                table_name="my_table",
-                                                identifier_column_name="Id")
+        _, mdl, dot, best_params, table_name = fit(population=get_table(), target_column_name='"Species"',
+                                                   table_name="my_table",
+                                                   identifier_column_name="Id")
 
         cv_res = IkatsApi.table.read(name=table_name)
 
@@ -131,9 +131,9 @@ class TestSkDecisionTreeCV(TestCase):
         Tests the nominal execution based upon mock data: IRIS data
         """
 
-        mdl, dot, best_params, table_name = fit(population=get_table(), target_column_name='"Species"',
-                                                identifier_column_name="Id", depth_parameters="0;2;5;3",
-                                                balanced_parameters="True;False", table_name="my_table", folds=5)
+        _, mdl, dot, best_params, table_name = fit(population=get_table(), target_column_name='"Species"',
+                                                   identifier_column_name="Id", depth_parameters="0;2;5;3",
+                                                   balanced_parameters="True;False", table_name="my_table", folds=5)
 
         cv_res = IkatsApi.table.read(name=table_name)
 

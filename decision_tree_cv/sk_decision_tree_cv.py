@@ -24,6 +24,7 @@ import numpy as np
 from sklearn import tree
 from sklearn.model_selection import GridSearchCV
 
+from ikats.algo.decision_tree.sk_mdl_to_tdt import sk_mdl_to_tdt
 from ikats.algo.decision_tree.sk_decision_tree import split_population
 from ikats.core.library.exception import IkatsException, IkatsInputTypeError
 from ikats.core.resource.api import IkatsApi
@@ -69,14 +70,15 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
     our population
     :type folds: int
 
-    :return: tuple of results: model, dot, best_params, cv_results:
+    :return: tuple of results: tdt, model, dot, best_params, cv_results:
+      - tdt: TDT formatted dict
       - model: is the model computed by the internal library Scikit-learn
       - dot: is the textual definition of the tree, based upon dot format: content parsable by graph viewers.
       - best_params: is the best combination of parameters found
       - cv_results: is the complete results of the cross validation algorithm, it's a table with the performance
                     (mean accuracy across folds and standard deviation) of every parameters combination that were
                     tested, ordered by the mean accuracy
-    :rtype:  DecisionTreeClassifier, str, str, dict
+    :rtype:  dict, DecisionTreeClassifier, str, str, dict
 
     :raises IkatsInputTypeError: if an argument has an unexpected type
     :raises IkatsException: another error occurred
@@ -115,11 +117,14 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
                 msg = "depth_parameters must be integers"
                 raise IkatsException(msg)
         else:  # a range is given
-            first_arg, second_arg = re.match(parsing_regexp, depth_parameters).groups()
+            first_arg, second_arg = re.match(
+                parsing_regexp, depth_parameters).groups()
             try:
-                if second_arg is None:  # when the user inputs a single arg 'range(n)'
+                # when the user inputs a single arg 'range(n)'
+                if second_arg is None:
                     depth_list = range(int(first_arg))
-                elif int(first_arg) > int(second_arg):  # otherwise i correct the case of a bad order of args
+                # otherwise i correct the case of a bad order of args
+                elif int(first_arg) > int(second_arg):
                     depth_list = range(int(second_arg), int(first_arg))
                 elif int(second_arg) > int(first_arg):  # already ordered args
                     depth_list = range(int(first_arg), int(second_arg))
@@ -141,12 +146,14 @@ def fit(population, target_column_name, identifier_column_name, table_name, fold
 
     elif type(balanced_parameters) is not str:
         msg = "balanced_parameters has unexpected type={}"
-        raise IkatsInputTypeError(msg.format(type(balanced_parameters).__name__))
+        raise IkatsInputTypeError(msg.format(
+            type(balanced_parameters).__name__))
 
     else:
         vals_balance = balanced_parameters.split(';')
         if len(vals_balance) > 2:
-            raise IkatsException('Only two possible values for balance parameters')
+            raise IkatsException(
+                'Only two possible values for balance parameters')
         if all([v in ['True', 'False'] for v in vals_balance]):
             parsed_balancing = ['balanced' if val == 'True' else None for val in vals_balance]
         else:
@@ -213,8 +220,8 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
 
         # 1/ prepare the learning set
         #
-        feature_vectors, target, class_names, column_names = split_population(population, target_column_name,
-                                                                              identifier_column_name)
+        feature_vectors, target, class_names, column_names = split_population(
+            population, target_column_name, identifier_column_name)
 
         # 2/ prepare the DecisionTree and CrossValidation procedure
         #
@@ -246,14 +253,13 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
         formatted_results['table_desc']['desc'] = description
         IkatsApi.table.create(data=formatted_results)
 
-        return gcv.best_estimator_, dot, formatted_best_params, table_name
+        return sk_mdl_to_tdt(mdl=gcv.best_estimator_, feature_names=column_names, ls_name=population["table_desc"][
+            "title"]), gcv.best_estimator_, dot, formatted_best_params, table_name
     except IkatsException:
         raise
     except Exception:
         msg = "Unexpected error: fit_population(..., {}, {}, {})"
-        raise IkatsException(msg.format(target_column_name,
-                                        identifier_column_name,
-                                        parameters))
+        raise IkatsException(msg.format(target_column_name, identifier_column_name, parameters))
 
 
 def _fill_table_cv_results(dic_result):
@@ -284,8 +290,10 @@ def _fill_table_cv_results(dic_result):
     sorted_runs = cell_array[:, 0].astype(int).tolist()
     sorted_cells = cell_array[:, 1:].tolist()
     for cell in sorted_cells:
-        cell[2] = str(cell[2] == 1)  # formatting the bool into a str that can be displayed by the table
-        cell[1] = 0 if cell[1] is None else cell[1]  # formatting the None from the backend to the 0 of the front
+        # formatting the bool into a str that can be displayed by the table
+        cell[2] = str(cell[2] == 1)
+        # formatting the None from the backend to the 0 of the front
+        cell[1] = 0 if cell[1] is None else cell[1]
     # Filling headers columns
     table['headers']['col'] = dict()
     table['headers']['col']['data'] = ['Score', 'rank', 'max_depth', 'balancing', 'mean_score', 'std_score']
