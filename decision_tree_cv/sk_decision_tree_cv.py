@@ -253,8 +253,8 @@ def fit_population_cv(population, target_column_name, identifier_column_name, ta
         formatted_results['table_desc']['desc'] = description
         IkatsApi.table.create(data=formatted_results)
 
-        return sk_mdl_to_tdt(mdl=gcv.best_estimator_, feature_names=column_names, ls_name=population["table_desc"][
-            "title"]), gcv.best_estimator_, dot, formatted_best_params, table_name
+        return sk_mdl_to_tdt(mdl=gcv.best_estimator_, feature_names=column_names, ls_name=population["table_desc"].get(
+            "title", "No title")), gcv.best_estimator_, dot, formatted_best_params, table_name
     except IkatsException:
         raise
     except Exception:
